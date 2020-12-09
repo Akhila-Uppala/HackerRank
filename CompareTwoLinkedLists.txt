@@ -1,0 +1,90 @@
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', inputStdin => {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', _ => {
+    inputString = inputString.replace(/\s*$/, '')
+        .split('\n')
+        .map(str => str.replace(/\s*$/, ''));
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+const SinglyLinkedListNode = class {
+    constructor(nodeData) {
+        this.data = nodeData;
+        this.next = null;
+    }
+};
+
+const SinglyLinkedList = class {
+    constructor() {
+        this.head = null;
+        this.tail = null;
+    }
+
+    insertNode(nodeData) {
+        const node = new SinglyLinkedListNode(nodeData);
+
+        if (this.head == null) {
+            this.head = node;
+        } else {
+            this.tail.next = node;
+        }
+
+        this.tail = node;
+    }
+};
+
+function printSinglyLinkedList(node, sep, ws) {
+    while (node != null) {
+        ws.write(String(node.data));
+
+        node = node.next;
+
+        if (node != null) {
+            ws.write(sep);
+        }
+    }
+}
+
+
+function CompareLists(llist1, llist2) {
+    let size1 = 0 ,
+        size2 = 0;
+    let head1 = llist1
+    let head2 = llist2
+    while(head1.next) {
+        size1++
+        head1 = head1.next
+    }
+    while(head2.next) {
+        size2++
+        head2 = head2.next
+    }
+    if(size2 === size1) {
+        llist1 = llist1.next
+        llist2 = llist2.next
+        if(llist1.data != llist2.data)
+            return 0;
+    } 
+    else 
+        return 0
+    return 1;
+}
+
+function main() {
