@@ -1,0 +1,71 @@
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', inputStdin => {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', _ => {
+    inputString = inputString.replace(/\s*$/, '')
+        .split('\n')
+        .map(str => str.replace(/\s*$/, ''));
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+
+function isValid(s) {
+    let counter = {};
+
+    let arr = s.split('').sort();
+    let smallValue = 0;
+    let allowedTimes = 0;
+    arr.forEach(element => {
+        counter[element] = counter[element] === undefined ? 1 : counter[element]+1;
+    });
+
+    for(let key in counter){
+        if(smallValue === 0){
+            smallValue = counter[key];
+            continue ;
+        }
+
+        if(smallValue !== counter[key]){
+            if(counter[key] === 1){
+                allowedTimes += 1;
+            } else {
+                allowedTimes += Math.abs(smallValue - counter[key]);
+            }
+        }
+
+        if(allowedTimes > 1){
+            break;
+        }
+    }
+
+    return allowedTimes > 1 ? "NO" : "YES";
+
+}
+
+function main() {
+    const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
+
+    const s = readLine();
+
+    let result = isValid(s);
+
+    ws.write(result + "\n");
+
+    ws.end();
+}
